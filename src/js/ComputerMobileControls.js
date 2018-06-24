@@ -34,9 +34,22 @@ THREEx.ComputerMobileControls = function (json_params)
 		} else
 			console.log("Have no Socket");
 	}
+
+	this.Buttons = {
+		TouchControl: null,
+		AccelerometerControl: null,
+		FrontMoving: null,
+		BackMoving: null
+      };
+
 	this.touchUpdate = this.touchUpdate.bind(this);
 	this.MessagesController = new MessagesController();
 
+	this.initControls();
+};
+
+THREEx.ComputerMobileControls.prototype.initControls = function ()
+{
 	this.OrientationParameters = {
 		alpha: 0,
 		beta: 0,
@@ -68,89 +81,90 @@ THREEx.ComputerMobileControls = function (json_params)
     }
 
 
-	this.AccelerometerControlButton = document.createElement("button");
-	this.AccelerometerControlButton.setAttribute("id", "AccelerometerControlButton");
-    this.AccelerometerControlButton.className = "AccelerometerControlButton";
-    // document.body.appendChild(this.AccelerometerControlButton);
+	this.Buttons.AccelerometerControl = document.createElement("button");
+	this.Buttons.AccelerometerControl.setAttribute("id", "AccelerometerControlButton");
+    this.Buttons.AccelerometerControl.className = "AccelerometerControlButton";
+    // document.body.appendChild(this.Buttons.AccelerometerControl);
 
-	this.TouchControlButton = document.createElement("button");
-	this.TouchControlButton.setAttribute("id", "TouchControlButton");
-    this.TouchControlButton.className = "TouchControlButton";
-    // document.body.appendChild(this.TouchControlButton);
+	this.Buttons.TouchControl = document.createElement("button");
+	this.Buttons.TouchControl.setAttribute("id", "TouchControlButton");
+    this.Buttons.TouchControl.className = "TouchControlButton";
+    // document.body.appendChild(this.Buttons.TouchControl);
 
-	this.AccelerometerControlButton.addEventListener("click", function () {
-		this.TouchControlButton.style.visibility = "visible";
-		this.AccelerometerControlButton.style.visibility = "hidden";
+	this.Buttons.AccelerometerControl.addEventListener("click", function () {
+		this.Buttons.TouchControl.style.visibility = "visible";
+		this.Buttons.AccelerometerControl.style.visibility = "hidden";
 		this.RotateHammer.enable = false;
 		this.update = this.accelerometerUpdate;
 	}.bind(this));
 
-	this.TouchControlButton.addEventListener("click", function () {
-		this.TouchControlButton.style.visibility = "hidden";
-		this.AccelerometerControlButton.style.visibility = "visible";
+	this.Buttons.TouchControl.addEventListener("click", function () {
+		this.Buttons.TouchControl.style.visibility = "hidden";
+		this.Buttons.AccelerometerControl.style.visibility = "visible";
 		this.RotateHammer.enable = true;
 		this.update = this.touchUpdate;
 	}.bind(this));
 
-	this.FrontMovingButton = document.createElement("div");
-	this.FrontMovingButton.setAttribute("id", "FrontMovingButton");
-    this.FrontMovingButton.className = "FrontMovingButton";
-	// document.body.appendChild(this.FrontMovingButton);
+	this.Buttons.FrontMoving = document.createElement("div");
+	this.Buttons.FrontMoving.setAttribute("id", "FrontMovingButton");
+    this.Buttons.FrontMoving.className = "FrontMovingButton";
+	// document.body.appendChild(this.Buttons.FrontMoving);
 
-	this.FrontMovingButton.onmousedown = function (event)
+	this.Buttons.FrontMoving.onmousedown = function (event)
 	{
 	 	this.FrontMovingOn = true;
 	}.bind(this);
 
-	this.FrontMovingButton.ontouchstart = function (event)
+	this.Buttons.FrontMoving.ontouchstart = function (event)
 	{
 	 	this.FrontMovingOn = true;
 	}.bind(this);
 
-	this.FrontMovingButton.onmouseup = function (event)
+	this.Buttons.FrontMoving.onmouseup = function (event)
 	{																																																																																																																																																																																																																																																																																																																																	
 	 	this.FrontMovingOn = false;
 	}.bind(this);
 
-	this.FrontMovingButton.ontouchend = function (event)
+	this.Buttons.FrontMoving.ontouchend = function (event)
 	{																																																																														
 	 	this.FrontMovingOn = false;
 	}.bind(this);																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			
 
-	this.BackMovingButton = document.createElement("div");
-	this.BackMovingButton.setAttribute("id", "BackMovingButton");
-    this.BackMovingButton.className = "BackMovingButton";
-	// document.body.appendChild(this.BackMovingButton);
+	this.Buttons.BackMoving = document.createElement("div");
+	this.Buttons.BackMoving.setAttribute("id", "BackMovingButton");
+    this.Buttons.BackMoving.className = "BackMovingButton";
+	// document.body.appendChild(this.Buttons.BackMoving);
 
-	this.BackMovingButton.onmousedown = function (event)																								
+	this.Buttons.BackMoving.onmousedown = function (event)																								
 	{
 	 	this.BackMovingOn = true;
 	}.bind(this);
 
-	this.BackMovingButton.ontouchstart = function (event)
+	this.Buttons.BackMoving.ontouchstart = function (event)
 	{
 	 	this.BackMovingOn = true;
 	}.bind(this);
 
-	this.BackMovingButton.onmouseup = function (event)
+	this.Buttons.BackMoving.onmouseup = function (event)
 	{
 	 	this.BackMovingOn = false;
 	}.bind(this);
 
-	this.BackMovingButton.ontouchend = function (event)
+	this.Buttons.BackMoving.ontouchend = function (event)
 	{
 	 	this.BackMovingOn = false;
 	}.bind(this);
 
 
 
+	
 	//mouse/touch controller
 	this.RotateHammer = new Hammer(document.body);
 	this.RotateHammer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
 	this.RotateHammer.on("pan", function (event) {
 
-		this.OrientationParameters.touchRotRadX = THREE.Math.degToRad(event.deltaX/this.RotationSpeed);
-		this.OrientationParameters.touchRotRadY = THREE.Math.degToRad(event.deltaY/this.RotationSpeed);
+		this.OrientationParameters.touchRotRadX = THREE.Math.degToRad(event.deltaX*this.RotationSpeed);
+		this.OrientationParameters.touchRotRadY = THREE.Math.degToRad(event.deltaY*this.RotationSpeed);
 		this.OrientationParameters.touchDeltaTime = event.deltaTime;
 
 	}.bind(this));
@@ -159,27 +173,42 @@ THREEx.ComputerMobileControls = function (json_params)
 	this.AccelerometerControls = new THREE.DeviceOrientationControls(this.Camera);
 	this.update = this.accelerometerUpdate;
 
-	if (this.DeviceType === this.DEVICE_TYPES.MOBILE) {
-		document.body.appendChild(this.BackMovingButton);
-	    document.body.appendChild(this.AccelerometerControlButton);
-	    document.body.appendChild(this.TouchControlButton);
-		document.body.appendChild(this.FrontMovingButton);
+	window.addEventListener("devicemotion", this.onDeviceMotion.bind(this));			
+	window.addEventListener("deviceorientation", this.onDeviceOrientation.bind(this));					
 
-		this.RotateHammer.enable = false;
-		this.update = this.accelerometerUpdate;
+	// if (this.DeviceType === this.DEVICE_TYPES.MOBILE) {
+	// 	document.body.appendChild(this.Buttons.BackMoving);
+	//     document.body.appendChild(this.Buttons.AccelerometerControl);
+	//     document.body.appendChild(this.Buttons.TouchControl);
+	// 	document.body.appendChild(this.FrontMovingButton);
 
-		window.addEventListener("devicemotion", this.onDeviceMotion.bind(this));			
-		window.addEventListener("deviceorientation", this.onDeviceOrientation.bind(this));					
-	} else {
-		document.body.appendChild(this.BackMovingButton);
-	    document.body.appendChild(this.AccelerometerControlButton);
-	    document.body.appendChild(this.TouchControlButton);
-		document.body.appendChild(this.FrontMovingButton);
+	// 	this.RotateHammer.enable = false;
+	// 	this.update = this.accelerometerUpdate;
+
+	// } else {
+		document.body.appendChild(this.Buttons.BackMoving);
+	    document.body.appendChild(this.Buttons.AccelerometerControl);
+	    document.body.appendChild(this.Buttons.TouchControl);
+		document.body.appendChild(this.Buttons.FrontMoving);
 		this.RotateHammer.enable = true;
 		this.update = this.touchUpdate;
-	}
-
+//	}
 };
+
+THREEx.ComputerMobileControls.prototype.sendFrontButtonDown = function(){
+	this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.FRONT_BUTTON_DOWN}));
+}
+THREEx.ComputerMobileControls.prototype.sendFrontButtonUp = function(){
+	this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.FRONT_BUTTON_UP}));
+}
+
+THREEx.ComputerMobileControls.prototype.sendBackButtonDown = function(){
+	this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.BACK_BUTTON_DOWN}));
+}
+THREEx.ComputerMobileControls.prototype.sendBackButtonUp = function(){
+	this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.BACK_BUTTON_UP}));
+}
+
 
 THREEx.ComputerMobileControls.prototype.accelerometerUpdate  = function (delta)
 {
@@ -206,11 +235,11 @@ THREEx.ComputerMobileControls.prototype.touchUpdate = function(delta)
 {
 
 	this.Camera.rotation.y -= this.OrientationParameters.touchRotRadX*delta;
-	this.Camera.rotation.x -= this.OrientationParameters.touchRotRadY*delta;	
+	//this.Camera.rotation.x -= this.OrientationParameters.touchRotRadY*delta;	
 
     this.MessagesController.SetPositionMessage = {
 		UserID: 0,
-		Position: this.Camera.position,
+//		Position: this.Camera.position,
 		Rotation: this.Camera.rotation
 	  };
 	  

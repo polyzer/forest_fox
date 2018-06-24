@@ -7,6 +7,7 @@ class CodeController {
         this.numbers = "0123456789";
 
         this.CodeViewBlock = document.getElementById("code-show-block");
+        this.CodeViewBlock.style.height = window.innerHeight + "px";
 
         this.generateCode();
     }
@@ -27,11 +28,13 @@ class CodeController {
         return text;
     }
 
-    showCodeViewWindow(){
+    showCodeViewWindow()
+    {
         this.CodeViewBlock.style.visibility = "visible";
     }
 
-    hideCodeViewWindow(){
+    hideCodeViewWindow()
+    {
         this.CodeViewBlock.style.visibility = "hidden";
     }
     

@@ -47,10 +47,9 @@ class ServerProgram {
     server.listen(8081);
     console.log("WebSocketServer start!");
   }
-  /* There we set our data parameters to WebSocket object;
-    that will help us find ID as soon as possible.
-  */
-  onConnection (ws) {
+
+  addToUnsorted(ws)
+  {
     ws.progDataArray = this.Unsorted;
     ws.progDataID = this.Unsorted.length;
     ws.progDataSelf = this;
@@ -60,6 +59,13 @@ class ServerProgram {
 
     ws.onmessage = this.onUnsortedMessage.bind(ws);
     ws.close = this.onUnsortedClose.bind(ws);
+  }
+
+  /* There we set our data parameters to WebSocket object;
+    that will help us find ID as soon as possible.
+  */
+  onConnection (ws) {
+    this.addToUnsorted(ws);
   }
   /* There we set to msg ID;
     that ID knows only one server cause Main(Desktop) Script
@@ -142,9 +148,10 @@ class ServerProgram {
       } else {
         let answer_message = {Type: this.progDataSelf.CONSTANTS.MESSAGES_TYPES.CONTROLLER_IS_DISCONNECTED};
         this.progDataPair.Master.send(JSON.stringify(answer_message));
-        this.progDataPair.Master.close();
-        this.progDataSelf.MastersAndControllers.splice(idx, 1);
-        this.progDataPair = null;
+        //this.progDataPair.Master.close();
+        //this.progDataSelf.MastersAndControllers.splice(idx, 1);
+        
+        this.progDataPair.Controller = null;
       }    
   }
 
@@ -167,9 +174,11 @@ class ServerProgram {
       } else {
         let answer_message = {Type: this.progDataSelf.CONSTANTS.MESSAGES_TYPES.MASTER_IS_DOSCONNECTED};
         this.progDataPair.Controller.send(JSON.stringify(answer_message));
-        this.progDataPair.Controller.close();
+//        this.progDataPair.Controller.close();
+        
         this.progDataSelf.MastersAndControllers.splice(idx, 1);
         this.progDataPair = null;
+        this.progDataSelf.addToUnsorted(this);
       }    
   }
   onMasterMessage (msg) {

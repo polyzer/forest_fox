@@ -3,6 +3,7 @@ class MobileCodeController {
         this.onButtonClick = onButtonClick;
 
         this.CodeViewBlock = document.getElementById("code-enter-window");
+        this.CodeViewBlock.style.height = window.innerHeight + "px";
         this.CodeInput = document.getElementById("code-input");
         this.CodeSendButton = document.getElementById("send-code-button");
         this.CodeSendButton.addEventListener("click", this.onSendButtonClick.bind(this));

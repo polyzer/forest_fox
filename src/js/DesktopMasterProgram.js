@@ -107,6 +107,11 @@ class DesktopMasterProgram {
 
     }
 
+    reinitScene()
+    {
+        this.ControlObject.position.set(0,0,0);
+    }
+
     // If Controller is disconnected;
     onControllerDisconnect()
     {
@@ -114,6 +119,8 @@ class DesktopMasterProgram {
         {
             window.alert("Connection with Controller is closed");
         }
+        this.reinitScene();
+        this.CodeController.showCodeViewWindow();
         console.log("Controller is disconnected");
     }
 
@@ -152,13 +159,8 @@ class DesktopMasterProgram {
         this.Scene = new THREE.Scene();
         this.Scene.background = new THREE.Color( 0xaaccff );
         this.Scene.fog = new THREE.FogExp2( 0xaaccff, 0.0007 );
-        //        this.Scene.add(this.Camera);
 
         this.Loader = new THREE.ColladaLoader();
-        // this.Loader.load("./src/scenes/telefermer.dae", function (dae) {
-        //     dae.scene.scale.set(10,10,10);
-        //     this.Scene.add(dae.scene);
-        // }.bind(this));
 
         let TextureLoader = new THREE.TextureLoader();
         TextureLoader.load("./src/models/forest/grass.png", function (tex) {
@@ -242,7 +244,6 @@ class DesktopMasterProgram {
     copyObjectOnScene(obj,count, scale, rand){
         for(let j = 0; j < count; j++){
             let mesh = obj.clone();
-            //let mesh = new THREE.Mesh(obj.geometry, obj.material);
             if(rand){
                 let sc = Math.random();
                 mesh.scale.set(scale*sc+(0.2*scale), scale*sc+(0.2*scale), scale*sc+(0.2*scale));
@@ -268,11 +269,9 @@ class DesktopMasterProgram {
     IN: json_params = {UserID, Position,Rotation}
     */
     setPosition(json_params) {
-        this.ControlObject.position.copy(json_params.Position);
+//        this.ControlObject.position.copy(json_params.Position);
         this.ControlObject.rotation.copy(json_params.Rotation);
-        //this.laserBeam.object3d.rotation.copy(json_params.Rotation);
-        //this.Lights[json_params.UserID].position.copy(json_params.Position);
-        //this.Lights[json_params.UserID].rotation.copy(json_params.Rotation);
+//        console.log(this.ControlObject.position);
     }
 
     update(){

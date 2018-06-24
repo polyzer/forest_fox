@@ -16,6 +16,7 @@ class MobileControllerProgram {
         Acceleration: new THREE.Vector3(),
         RotationRate: new THREE.Vector3() 
       };
+
   
       this.MobileCodeController = new MobileCodeController(this.onCodeSend.bind(this));
   
@@ -119,8 +120,8 @@ class MobileControllerProgram {
           {
               this.Controls = new THREEx.ComputerMobileControls({
                   Socket: this.Socket,
-                  MovingSpeed: 10,
-                  RotationSpeed: 50
+                  MovingSpeed: 0.1,
+                  RotationSpeed: 1.3
               });
           } else {
  //       this.Controls = new THREE.DeviceOrientationControls(this.mesh);
@@ -208,7 +209,23 @@ class MobileControllerProgram {
         this.Socket.send(JSON.stringify(this.MessagesController.ButtonUpMessage));
         this.LightFireButton.dataset.pressed = "0";
       }
-  }
+    
   
+    }
+  
+    sendFrontButtonDown(){
+      this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.FRONT_BUTTON_DOWN}));
+    }
+    sendFrontButtonUp(){
+        this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.FRONT_BUTTON_UP}));
+    }
+
+    sendBackButtonDown(){
+        this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.BACK_BUTTON_DOWN}));
+    }
+    sendBackButtonUp(){
+        this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.BACK_BUTTON_UP}));
+    }
+
   };
   
