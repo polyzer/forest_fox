@@ -6,6 +6,7 @@
 
 class DesktopMasterProgram {
     constructor(){
+
         this.onWindowResize = this.onWindowResize.bind(this);
         this.onLaserShot = this.onLaserShot.bind(this);
         window.addEventListener("resize", this.onWindowResie);
@@ -18,10 +19,10 @@ class DesktopMasterProgram {
 
         this.speedMult = 10;
 
+        this.itWasCreated = false;
+
         this.MessagesController = new MessagesController();
-
         this.CodeController = new CodeController();
-
         this.Clock = new THREE.Clock();
 
         this.Socket = new WebSocket(CONSTANTS.WEB_SOCKET_ADDR);
@@ -137,7 +138,10 @@ class DesktopMasterProgram {
     {
         console.log("code is submitted");
         this.CodeController.hideCodeViewWindow();
-        this.createScene();
+        if(!this.itWasCreated) {
+            this.createScene();
+            this.itWasCreated = true;
+        }
         this.update();
     }
 

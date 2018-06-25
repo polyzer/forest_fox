@@ -10,8 +10,8 @@
 	background-image: url("../images/buttons/front.png");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	height: 100px;
-	width: 100px;
+	height: 200px;
+	width: 200px;
 }
 .BackMovingButton {
 	display: inline-block;
@@ -19,13 +19,13 @@
 	padding: 10px 15px;
 	position: absolute;
 	left: 50%;
-	top: 90%;
+	bottom: 0%;
 	z-index: 10090008899878768765;
 	background-image: url("../images/buttons/back.png");
 	background-size: 100% 100%;
 	background-repeat: no-repeat;
-	height: 100px;
-	width: 100px;
+	height: 200px;
+	width: 200px;
 }
 .LeftMovingButton {
 	display: inline-block;

@@ -1,6 +1,7 @@
 /*
   CONSTANTS defines all constants
 */
+
 function setJSONParams(json_params, names_array, obj)
 {
   for(let param_name in names_array)
@@ -8,7 +9,28 @@ function setJSONParams(json_params, names_array, obj)
       obj[param_name] = json_params[param_name];
     else
       throw new Error("We have no needed parameter: " + param_name);
+}
+
+let DEVICE_TYPES = {
+  DESKTOP: 0,
+  MOBILE: 1
 };
+
+function checkPlatform()
+{
+
+ 	let testExp = new RegExp('Android|webOS|iPhone|iPad|' +
+    		       'BlackBerry|Windows Phone|'  +
+    		       'Opera Mini|IEMobile|Mobile' , 
+    		      'i');
+  
+    if (testExp.test(navigator.userAgent)){
+    	return DEVICE_TYPES.MOBILE;
+    }else{
+    	return DEVICE_TYPES.DESKTOP;
+    }
+
+}
 
 const CONSTANTS = {
    MESSAGES_TYPES : {

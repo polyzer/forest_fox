@@ -21,13 +21,26 @@
 </head>
 <body>
   <div id="code-show-block" class="code-show-block">
-    <label for="code-text">Ваш код:</label>
-    <div id="code-text" class="code-text"></div>
+    <div>Откройте в браузере телефона данную страницу.</div>
+    <div id="location-name"></div>
+    <div class="label">И введите следующий код:</div>
+    <div id="code-text" class="code-text">0000</div>
   </div>
 
 <script>
 // create new LightPrograms class Object;
+(function () {
+  document.getElementById("location-name").textContent = window.location;
+})();
+
+if(checkPlatform() === DEVICE_TYPES.MOBILE)
+{
+  window.location.replace("https://www.polyzer.org/fox_forest/mobile.html");
+  //window.location.reload("https://www.polyzer.org/fox_forest/mobile.html");
+}
+
 let program = new DesktopMasterProgram();
+
 </script>
 
 </body>

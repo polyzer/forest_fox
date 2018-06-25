@@ -112,22 +112,22 @@ THREEx.ComputerMobileControls.prototype.initControls = function ()
 
 	this.Buttons.FrontMoving.onmousedown = function (event)
 	{
-	 	this.FrontMovingOn = true;
+		this.sendFrontButtonDown();
 	}.bind(this);
 
 	this.Buttons.FrontMoving.ontouchstart = function (event)
 	{
-	 	this.FrontMovingOn = true;
+		this.sendFrontButtonDown();
 	}.bind(this);
 
 	this.Buttons.FrontMoving.onmouseup = function (event)
 	{																																																																																																																																																																																																																																																																																																																																	
-	 	this.FrontMovingOn = false;
+		this.sendFrontButtonUp();
 	}.bind(this);
 
 	this.Buttons.FrontMoving.ontouchend = function (event)
-	{																																																																														
-	 	this.FrontMovingOn = false;
+	{																																																																																																																																																																																																																																																																																																																									
+		this.sendFrontButtonUp();
 	}.bind(this);																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																			
 
 	this.Buttons.BackMoving = document.createElement("div");
@@ -137,23 +137,27 @@ THREEx.ComputerMobileControls.prototype.initControls = function ()
 
 	this.Buttons.BackMoving.onmousedown = function (event)																								
 	{
-	 	this.BackMovingOn = true;
+//	 	this.BackMovingOn = true;
+		this.sendBackButtonDown();
 	}.bind(this);
 
 	this.Buttons.BackMoving.ontouchstart = function (event)
 	{
-	 	this.BackMovingOn = true;
-	}.bind(this);
+//	 	this.BackMovingOn = true;
+		 this.sendBackButtonDown();
+		}.bind(this);
 
 	this.Buttons.BackMoving.onmouseup = function (event)
 	{
-	 	this.BackMovingOn = false;
-	}.bind(this);
+//	 	this.BackMovingOn = false;
+		 this.sendBackButtonUp();
+		}.bind(this);
 
 	this.Buttons.BackMoving.ontouchend = function (event)
 	{
-	 	this.BackMovingOn = false;
-	}.bind(this);
+//	 	this.BackMovingOn = false;
+		 this.sendBackButtonUp();
+		}.bind(this);
 
 
 

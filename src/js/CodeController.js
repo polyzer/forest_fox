@@ -53,7 +53,7 @@ class CodeController {
 
     generateCode(){
         this.Code = this.generateRandomString(4, this.numbers);
-        document.getElementById("code-text").innerText = this.Code;
+        document.getElementById("code-text").textContent = this.Code;
     }
 
 };
