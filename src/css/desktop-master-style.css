@@ -8,7 +8,7 @@
 	align-items: center;
     margin: auto;   
 	font-size: 90%;
-
+	bottom: 0%;
 }
 
 .code-show-block .skyfox-logo-block {
@@ -17,10 +17,9 @@
 
 .code-show-block .label{
     font-size: 200%;
-    margin-bottom: 30px;
 }
 
 .code-show-block div{
-	font-size: 400%;
+	font-size: 300%;
 }
 

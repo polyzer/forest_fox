@@ -2,19 +2,21 @@ class CodeController {
     constructor(){
         this.code = "";
 
-        this.alphabet = "abcdefghijklmnopqrstuvwxyz";
-        this.ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        this.numbers = "0123456789";
+        this.ALPHABETS = {
+            LOWERCASE: "abcdefghijklmnopqrstuvwxyz",
+            UPPERCASE: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            NUMBERS: "0123456789"
+        };
 
         this.CodeViewBlock = document.getElementById("code-show-block");
-        this.CodeViewBlock.style.height = window.innerHeight + "px";
+        this.CodeViewBlock.style.height = window.innerHeight*0.2 + "px";
 
         this.generateCode();
     }
     /**
      * 
      * @param {Number} len Length of the generated string
-     * @param {String} dict String of 
+     * @param {String} dict String of one of the alphabets
      */
     generateRandomString(len, dict)
     {
@@ -52,7 +54,7 @@ class CodeController {
     }
 
     generateCode(){
-        this.Code = this.generateRandomString(4, this.numbers);
+        this.Code = this.generateRandomString(4, this.ALPHABETS.LOWERCASE);
         document.getElementById("code-text").textContent = this.Code;
     }
 
