@@ -118,7 +118,7 @@ class DesktopMasterProgram {
     {
         if(this.Container)
         {
-            window.alert("Connection with Controller is closed");
+//            window.alert("Connection with Controller is closed");
         }
         this.reinitScene();
         this.CodeController.showCodeViewWindow();
@@ -162,7 +162,7 @@ class DesktopMasterProgram {
         this.Camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
         this.Scene = new THREE.Scene();
         this.Scene.background = new THREE.Color( 0xaaccff );
-        this.Scene.fog = new THREE.FogExp2( 0xaaccff, 0.0007 );
+        this.Scene.fog = new THREE.FogExp2( 0xaaccff, 0.007 );
 
         this.Loader = new THREE.ColladaLoader();
 

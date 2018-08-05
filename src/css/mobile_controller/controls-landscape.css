@@ -1,0 +1,95 @@
+.FrontMovingButton-landscape-block {
+	display: inline-block;
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	left: 0%;
+	top: 0%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/tracks_redfox.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.BackMovingButton-landscape-block {
+	display: inline-block;
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	left: 0%;
+	bottom: 0%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/tracks_redfox.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	transform: rotate(180deg);
+}
+.LeftMovingButton-landscape-block {
+	display: inline-block;
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	left: 0%;
+	top: 90%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/tracks_redfox.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	transform: rotate(90deg);
+}
+.RightMovingButton-landscape-block {
+	display: inline-block;
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	left: 0%;
+	top: 90%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/tracks_redfox.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	transform: rotate(90deg);
+}
+
+.rotation-area-landscape-block {
+	display: inline-block;
+	position: absolute;
+	left: 50%;
+	top: 0%;
+	z-index: 10090008899878768765;
+	background-color: #ff9501;
+}
+
+.skyfox-logo-block {
+	z-index: 10090008899878768765;
+	background-color: #ff9501;
+	width: 50%;
+	height: auto;	
+}
+
+.AccelerometerControlButton {
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	right: 10%;
+	bottom: 10%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/accelerometer.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+
+}
+.TouchControlButton {
+	margin: 5px 10px;
+	padding: 10px 15px;
+	position: absolute;
+	right: 10%;
+	bottom: 10%;
+	z-index: 10090008899878768765;
+	background-image: url("../../images/buttons/touch.png");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	height: 100px;
+	width: 100px;
+}

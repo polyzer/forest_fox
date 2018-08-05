@@ -14,6 +14,18 @@ let MasterAndController = {
   Code: null
 };
 
+const fs = require('fs');
+const https = require('https');
+//let WebSocketServer = new require("ws");
+const WebSocket = require('ws');
+const CONSTANTS = require('./src/js/constants');
+
+const server = new https.createServer({
+  key: fs.readFileSync("/etc/apache2/ssl/www_polyzer_org/www.polyzer.org_private.key"),
+  cert: fs.readFileSync("/etc/apache2/ssl/www_polyzer_org/www_polyzer_org.crt")
+});
+
+
 /**
  * It's main program.
  */
@@ -23,16 +35,6 @@ class ServerProgram {
     this.removeFromUnsortedAndAddToClients = this.removeFromUnsortedAndAddToClients.bind(this);
     this.onConnection = this.onConnection.bind(this);
 
-    const fs = require('fs');
-    const https = require('https');
-    //let WebSocketServer = new require("ws");
-    const WebSocket = require('ws');
-    this.CONSTANTS = require('./src/js/constants');
-    
-    const server = new https.createServer({
-      key: fs.readFileSync("/etc/apache2/ssl/www_polyzer_org/www.polyzer.org_private.key"),
-    	cert: fs.readFileSync("/etc/apache2/ssl/www_polyzer_org/www_polyzer_org.crt")
-    });
     this.webSocketServer = new WebSocket.Server({ server });
 
     // There adds all users on connection;
@@ -73,13 +75,13 @@ class ServerProgram {
   */
   onUnsortedMessage (event) {
     console.log(event.data);
-    console.log(this.progDataSelf.CONSTANTS.MESSAGES_TYPES.ADD_USER);
+    console.log(CONSTANTS.MESSAGES_TYPES.ADD_USER);
 
     let data = JSON.parse(event.data);
 
     switch(data.Type)
     {
-      case this.progDataSelf.CONSTANTS.MESSAGES_TYPES.ADD_USER:
+      case CONSTANTS.MESSAGES_TYPES.ADD_USER:
         /**
          * Add controller by Code to Master.
          */
@@ -96,7 +98,7 @@ class ServerProgram {
             this.progDataPair = this.progDataSelf.MastersAndControllers[i];
             this.onmessage = this.progDataSelf.onControllerMessage.bind(this);
             this.onclose = this.progDataSelf.onControllerClose.bind(this);
-            answer_message.Type = this.progDataSelf.CONSTANTS.MESSAGES_TYPES.USER_CODE_IS_SUBMITTED;
+            answer_message.Type = CONSTANTS.MESSAGES_TYPES.USER_CODE_IS_SUBMITTED;
             this.send(JSON.stringify(answer_message));   
             this.progDataPair.Master.send(JSON.stringify(answer_message));
             return;
@@ -105,10 +107,10 @@ class ServerProgram {
          /**If Code, that user send isn't right! 
           * we must send him notification.
          */
-         answer_message.Type = this.progDataSelf.CONSTANTS.MESSAGES_TYPES.USER_CODE_IS_NOT_SUBMITTED;
+         answer_message.Type = CONSTANTS.MESSAGES_TYPES.USER_CODE_IS_NOT_SUBMITTED;
          this.send(JSON.stringify(answer_message));
       break; 
-      case this.progDataSelf.CONSTANTS.MESSAGES_TYPES.ADD_MASTER:
+      case CONSTANTS.MESSAGES_TYPES.ADD_MASTER:
         //this.progDataSelf.removeFromUnsortedAndAddToMasters(this);  
         /**
          * Add controller by code to Master.
@@ -146,7 +148,7 @@ class ServerProgram {
         this.progDataSelf.MastersAndControllers.splice(idx, 1);
         this.progDataPair = null;
       } else {
-        let answer_message = {Type: this.progDataSelf.CONSTANTS.MESSAGES_TYPES.CONTROLLER_IS_DISCONNECTED};
+        let answer_message = {Type: CONSTANTS.MESSAGES_TYPES.CONTROLLER_IS_DISCONNECTED};
         this.progDataPair.Master.send(JSON.stringify(answer_message));
         //this.progDataPair.Master.close();
         //this.progDataSelf.MastersAndControllers.splice(idx, 1);
@@ -159,7 +161,8 @@ class ServerProgram {
     let data = JSON.parse(event.data);
     data.UserID = this.progDataID;
     //console.log(data);
-    this.progDataPair.Master.send(JSON.stringify(data));
+    if(this.progDataPair.Master.readyState === WebSocket.OPEN)
+      this.progDataPair.Master.send(JSON.stringify(data));
 
   }
   /////////////////////////////
@@ -172,10 +175,9 @@ class ServerProgram {
         this.progDataSelf.MastersAndControllers.splice(idx, 1);
         this.progDataPair = null;
       } else {
-        let answer_message = {Type: this.progDataSelf.CONSTANTS.MESSAGES_TYPES.MASTER_IS_DOSCONNECTED};
+        let answer_message = {Type:CONSTANTS.MESSAGES_TYPES.MASTER_IS_DOSCONNECTED};
         this.progDataPair.Controller.send(JSON.stringify(answer_message));
 //        this.progDataPair.Controller.close();
-        
         this.progDataSelf.MastersAndControllers.splice(idx, 1);
         this.progDataPair = null;
         this.progDataSelf.addToUnsorted(this);
@@ -203,7 +205,7 @@ class ServerProgram {
 
     /// PHUCKIN KOSTYL'.
     /// There we need to use MessagesController ... But we have no him.
-    let data = JSON.stringify({Type: this.CONSTANTS.MESSAGES_TYPES.ADD_USER, UserID: ws.progDataID});
+    let data = JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.ADD_USER, UserID: ws.progDataID});
     for(let i = 0; i < this.Masters.length; i++)
     {
       this.Masters[i].send(data);

@@ -7,6 +7,7 @@
 
 class MobileControllerProgram {
     constructor(){
+
       //it's a users array, that represents as lights on scene;
       this.update = this.update.bind(this);
       this.onLightFireButtonTouchStart = this.onLightFireButtonTouchStart.bind(this);
@@ -20,8 +21,6 @@ class MobileControllerProgram {
   
       this.MobileCodeController = new MobileCodeController(this.onCodeSend.bind(this));
   
-      this.onWindowResize = this.onWindowResize.bind(this);
-      window.addEventListener("resize", this.onWindowResie);
       this.onDeviceMotion = this.onDeviceMotion.bind(this);
       //window.addEventListener("devicemotion", this.onDeviceMotion);
   
@@ -45,7 +44,7 @@ class MobileControllerProgram {
           {
             //Server sent notification that we need to enter code from screen;
             case CONSTANTS.MESSAGES_TYPES.ENTER_YOUR_CODE:
-  
+              
             break;
   
             //Server sent notification that our code is right;
@@ -118,28 +117,28 @@ class MobileControllerProgram {
       }
       if(this.DeviceType === this.DEVICE_TYPES.MOBILE)
           {
-              this.Controls = new THREEx.ComputerMobileControls({
+              this.Controls = new MobileControls({
                   Socket: this.Socket,
                   MovingSpeed: 0.1,
                   RotationSpeed: 1.3
               });
           } else {
  //       this.Controls = new THREE.DeviceOrientationControls(this.mesh);
-            this.Controls = new THREEx.ComputerMobileControls({
+            this.Controls = new MobileControls({
               Socket: this.Socket,
               MovingSpeed: 10,
               RotationSpeed: 50
             });
           }
   
-      this.Container = document.createElement("div");
-      this.Container.id = "Container";
-      document.body.appendChild(this.Container);
+      // this.Container = document.createElement("div");
+      // this.Container.id = "Container";
+      // document.body.appendChild(this.Container);
   
-      this.Renderer = new THREE.WebGLRenderer();
-      this.Renderer.setSize(window.innerWidth, window.innerHeight);
-      this.Container.appendChild(this.Renderer.domElement);
-      this.update();
+      // this.Renderer = new THREE.WebGLRenderer();
+      // this.Renderer.setSize(window.innerWidth, window.innerHeight);
+      // this.Container.appendChild(this.Renderer.domElement);
+      // this.update();
   
     }
   
@@ -166,12 +165,7 @@ class MobileControllerProgram {
       this.Renderer.render(this.Scene, this.Camera);
       requestAnimationFrame(this.update);
     }
-  
-    onWindowResize(){
-      this.Camera.aspect = window.innerWidth / window.innerHeight;
-      this.Camera.updateProjectionMatrix();
-      this.Renderer.setSize( window.innerWidth, window.innerHeight );
-    }
+
   
     onDeviceMotion(event) {
       this.AccelParameters.RotationRate.x = event.rotationRate.alpha;
@@ -212,7 +206,9 @@ class MobileControllerProgram {
     
   
     }
-  
+    /**
+     * 
+     */
     sendFrontButtonDown(){
       this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.FRONT_BUTTON_DOWN}));
     }

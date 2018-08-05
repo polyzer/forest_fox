@@ -1,6 +1,7 @@
 body{
     margin: 0px;
     overflow: hidden;
+    background-color: white;
   }
 canvas { 
     display: block; /* fix necessary to remove space at bottom of canvas */ 

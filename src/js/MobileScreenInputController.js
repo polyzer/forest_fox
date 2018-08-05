@@ -119,21 +119,26 @@ class MobileScreenInputController{
         this.Buttons.Right.onmousedown = function (event)
         {
             this.sendRightButtonDown();
+            event.preventDefault();
         }.bind(this);
     
         this.Buttons.Right.ontouchstart = function (event)
         {
             this.sendRightButtonDown();
+            event.preventDefault();
         }.bind(this);
     
         this.Buttons.Right.onmouseup = function (event)
         {
             this.sendRightButtonUp();
+            event.preventDefault();
         }.bind(this);
     
         this.Buttons.Right.ontouchend = function (event)
         {
             this.sendRightButtonUp();
+            event.preventDefault();
+
         }.bind(this);    
     
     
