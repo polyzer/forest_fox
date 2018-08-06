@@ -159,14 +159,12 @@ class MobileControls
 		{
 	//	 	this.BackMovingOn = true;
 			this.sendBackButtonDown();
-			event.preventDefault();
 		}.bind(this);
 
 		this.Buttons.BackMoving.ontouchstart = function (event)
 		{
 	//	 	this.BackMovingOn = true;
 			this.sendBackButtonDown();
-			event.preventDefault();
 
 			}.bind(this);
 
@@ -174,7 +172,6 @@ class MobileControls
 		{
 	//	 	this.BackMovingOn = false;
 			this.sendBackButtonUp();
-			event.preventDefault();
 
 			}.bind(this);
 
@@ -182,16 +179,12 @@ class MobileControls
 		{
 	//	 	this.BackMovingOn = false;
 			this.sendBackButtonUp();
-			event.preventDefault();
 
 			}.bind(this);
 
 		this.RotationArea = document.createElement("div");
 		this.RotationArea.id = "RotationArea";
 		this.RotationArea.className = "rotation-area-portrait-block";
-		this.SkyFoxImage = new Image(100, 200);
-		this.SkyFoxImage.src = "./src/images/skyfox/skyfox.png";
-		this.RotationArea.appendChild(this.SkyFoxImage);
 
 		//mouse/touch controller
 		this.RotateHammer = new Hammer(this.RotationArea);
@@ -201,7 +194,6 @@ class MobileControls
 			this.OrientationParameters.touchRotRadX = THREE.Math.degToRad(event.deltaX*this.RotationSpeed);
 			this.OrientationParameters.touchRotRadY = THREE.Math.degToRad(event.deltaY*this.RotationSpeed);
 			this.OrientationParameters.touchDeltaTime = event.deltaTime;
-			event.preventDefault();
 		}.bind(this));
 
 

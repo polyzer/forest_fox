@@ -160,6 +160,7 @@ class DesktopMasterProgram {
 //            window.alert("Connection with Controller is closed");
         }
         this.reinitScene();
+        this.onUserExit();
         this.CodeController.showCodeViewWindow();
         console.log("Controller is disconnected");
     }
@@ -180,30 +181,20 @@ class DesktopMasterProgram {
         if(!this.itWasCreated) {
             this.itWasCreated = true;
         }
+        this.onUserComing();
     }
 
     onUserComing()
     {
-        this.Loader.load("./src/models/fox_walk.dae", function (dae){
-            this.ControlObject = new THREE.Object3D();
-            this.Cameras.FoxFirstPersonCamera.position.set(-1, 1.2, -0.35);
-            this.Scene.add(this.ControlObject);
-            this.ControlObject.add(this.Cameras.FoxFirstPersonCamera);
-            this.ControlObject.add(dae.scene);
-            dae.scene.rotation.z+= Math.PI;
-            dae.scene.scale.set(0.5, 0.5, 0.5);
-            var animations = dae.animations;
-			var avatar = dae.scene;
-			dae.scene.children[1].material.color = new THREE.Color(0xFFFFFF);
-			dae.scene.children[1].material.needsUpdate = true;
-            
-
-			this.Mixer = new THREE.AnimationMixer( avatar );
-			var action = this.Mixer.clipAction( animations[ 0 ] ).play();
-        }.bind(this));    
-
+        this.updatableFunctions.splice(0,this.updatableFunctions.length);
+        this.setFoxFirstPersonCamera();            
     }
-    
+    onUserExit()
+    {
+        this.updatableFunctions.splice(0,this.updatableFunctions.length);
+        this.updatableFunctions.push(this.waitingUserConnectionUpdate);
+        this.setWaitingUserCamera();            
+    }    
     createScene (){
         this.update = this.update.bind(this);
         this.Container = document.createElement("div");
@@ -278,6 +269,22 @@ class DesktopMasterProgram {
                 }
             }
         }.bind(this));
+        this.Loader.load("./src/models/fox_walk.dae", function (dae){
+            this.ControlObject = new THREE.Object3D();
+            this.Cameras.FoxFirstPersonCamera.position.set(-1, 1.2, -0.35);
+            this.Scene.add(this.ControlObject);
+            this.ControlObject.add(this.Cameras.FoxFirstPersonCamera);
+            this.ControlObject.add(dae.scene);
+            dae.scene.rotation.z+= Math.PI;
+            dae.scene.scale.set(0.5, 0.5, 0.5);
+            var animations = dae.animations;
+			var avatar = dae.scene;
+			dae.scene.children[1].material.color = new THREE.Color(0xFFFFFF);
+			dae.scene.children[1].material.needsUpdate = true;
+
+			this.Mixer = new THREE.AnimationMixer( avatar );
+			var action = this.Mixer.clipAction( animations[ 0 ] ).play();
+        }.bind(this));    
 
         this.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 0.9);
         this.Scene.add(this.AmbientLight);

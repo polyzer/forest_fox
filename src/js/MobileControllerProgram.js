@@ -138,7 +138,7 @@ class MobileControllerProgram {
       // this.Renderer = new THREE.WebGLRenderer();
       // this.Renderer.setSize(window.innerWidth, window.innerHeight);
       // this.Container.appendChild(this.Renderer.domElement);
-      // this.update();
+       this.update();
   
     }
   
@@ -162,7 +162,7 @@ class MobileControllerProgram {
       // if(this.Socket.readyState === WebSocket.OPEN){
       //   this.Socket.send(JSON.stringify(this.MessagesController.SetPositionMessage));
       // }
-      this.Renderer.render(this.Scene, this.Camera);
+      //this.Renderer.render(this.Scene, this.Camera);
       requestAnimationFrame(this.update);
     }
 
