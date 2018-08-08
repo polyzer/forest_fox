@@ -35,6 +35,14 @@ class MessagesController {
       Type: CONSTANTS.MESSAGES_TYPES.FIRE_BUTTON_UP,
       UserID: null
     }
+    this.NeedCallFoxMessageObject = {
+      Type: CONSTANTS.MESSAGES_TYPES.NEED_CALL_FOX,
+      UserID: null
+    }
+    this.FoxCalledMessageObject = {
+      Type: CONSTANTS.MESSAGES_TYPES.FOX_CALLED,
+      UserID: null
+    }
   }
 
   get AddMasterMessage(){

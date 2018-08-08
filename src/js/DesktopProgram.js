@@ -10,6 +10,8 @@ class DesktopMasterProgram {
 
         window.addEventListener("resize", this.onWindowResize);
 
+        this.GroundParameters = new THREE.Vector3(1000, 0, 1000);
+
         this.FrontMovingOn = false;
         this.BackMovingOn = false;
         this.LeftMovingOn = false;
@@ -23,12 +25,12 @@ class DesktopMasterProgram {
 
         this.Cameras = {
             // This camera is with fox
-            FoxFirstPersonCamera: null,
+            FoxFirstPersonCamera: new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000),
             // This camera uses when
-            WaitingConnectionCamera: null
+            WaitingConnectionCamera: new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000),
+            // This camera moving on the plain
+            MovingCamera: new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000)
         };
-        this.Cameras.FoxFirstPersonCamera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
-        this.Cameras.WaitingConnectionCamera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
         
         this.Scene.add(this.Cameras.FoxFirstPersonCamera);
         this.Scene.add(this.Cameras.WaitingConnectionCamera);
@@ -184,9 +186,10 @@ class DesktopMasterProgram {
         this.onUserComing();
     }
 
-    onUserComing()
+    async onUserComing()
     {
         this.updatableFunctions.splice(0,this.updatableFunctions.length);
+        await this.foxAppearance();
         this.setFoxFirstPersonCamera();            
     }
     onUserExit()
@@ -220,7 +223,7 @@ class DesktopMasterProgram {
             tex.wrapS = THREE.RepeatWrapping;
             tex.wrapT = THREE.RepeatWrapping;
             tex.repeat.set(100, 100);
-            let ground = new THREE.Mesh(new THREE.PlaneBufferGeometry(1000, 1000), new THREE.MeshBasicMaterial({map: tex}));
+            let ground = new THREE.Mesh(new THREE.PlaneBufferGeometry(this.GroundParameters.x, this.GroundParameters.z), new THREE.MeshBasicMaterial({map: tex}));
             ground.rotation.x -= Math.PI/2;
             this.Scene.add(ground);
         }.bind(this));
@@ -307,6 +310,33 @@ class DesktopMasterProgram {
         }
     }
 
+    async foxAppearance() {
+        
+        let point = new THREE.Vector3(
+            Math.random()*this.GroundParameters.x,
+            Math.random()*this.GroundParameters.y,
+            Math.random()*this.GroundParameters.z 
+        );
+
+        this.Cameras.MovingCamera.position.copy(this.Cameras.WaitingConnectionCamera.position);
+        this.Camera = this.Cameras.MovingCamera;
+        return new Promise((resolve) => {
+            this.updatableFunctions.push(function (time){
+                let pos = this.Cameras.MovingCamera.position.clone();
+                let len = pos.sub(point).length();
+                if(len > 3){
+                    let sub_vec = point.clone();
+                    sub_vec.sub(this.Cameras.MovingCamera.position);
+                    this.Cameras.MovingCamera.position.add(sub_vec.normalize().multiplyScalar(time*10));
+                    this.Camera.lookAt(point);
+                } else{
+                    this.updatableFunctions.splice(0,this.updatableFunctions.length);
+                    console.log("ok");
+                    resolve();
+                }
+            }.bind(this));    
+        });
+    }
 
     /*
     IN: json_params = {UserID};

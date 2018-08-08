@@ -60,7 +60,6 @@ class MobileControls
 			return this.DISPOSITIONS.PORTRAIT;
 		else 
 			return this.DISPOSITIONS.LANDSCAPE;
-		
 	}
 
 	initControls()

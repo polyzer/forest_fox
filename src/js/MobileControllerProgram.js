@@ -15,7 +15,12 @@ class MobileControllerProgram {
   
       this.AccelParameters = {
         Acceleration: new THREE.Vector3(),
-        RotationRate: new THREE.Vector3() 
+        RotationRate: new THREE.Vector3(), 
+      };
+
+      this.CallFoxRequiredParameters = {
+        NEEDED: new THREE.Vector3(20, 20, 20),
+        Current: new THREE.Vector3()
       };
 
   
@@ -76,6 +81,10 @@ class MobileControllerProgram {
   
     }
   
+    callFox(){
+
+    }
+
     start(){
        this.Camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 10000);
       // this.Camera.position.z = 100;
@@ -163,6 +172,7 @@ class MobileControllerProgram {
       //   this.Socket.send(JSON.stringify(this.MessagesController.SetPositionMessage));
       // }
       //this.Renderer.render(this.Scene, this.Camera);
+      
       requestAnimationFrame(this.update);
     }
 
