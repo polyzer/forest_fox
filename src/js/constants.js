@@ -60,8 +60,11 @@ const CONSTANTS = {
      BACK_BUTTON_UP: 18,
      BACK_BUTTON_DOWN: 19,
 
-     NEED_CALL_FOX: 20,
-     FOX_CALLED: 21
+     CHANGEVIEW_BUTTON_DOWN: 20,
+     CHANGEVIEW_BUTTON_UP: 21,
+
+     NEED_CALL_FOX: 22,
+     FOX_CALLED: 23
 
    },
    WEB_SOCKET_ADDR : "wss://www.polyzer.org:8081"

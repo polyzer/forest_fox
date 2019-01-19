@@ -15,7 +15,7 @@ class MobileControllerProgram {
   
       this.AccelParameters = {
         Acceleration: new THREE.Vector3(),
-        RotationRate: new THREE.Vector3(), 
+        RotationRate: new THREE.Vector3()
       };
 
       this.CallFoxRequiredParameters = {
@@ -126,11 +126,11 @@ class MobileControllerProgram {
       }
       if(this.DeviceType === this.DEVICE_TYPES.MOBILE)
           {
-              this.Controls = new MobileControls({
-                  Socket: this.Socket,
-                  MovingSpeed: 0.1,
-                  RotationSpeed: 1.3
-              });
+            this.Controls = new MobileControls({
+                Socket: this.Socket,
+                MovingSpeed: 0.1,
+                RotationSpeed: 1.3
+            });
           } else {
  //       this.Controls = new THREE.DeviceOrientationControls(this.mesh);
             this.Controls = new MobileControls({

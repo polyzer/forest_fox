@@ -8,7 +8,7 @@ class Light {
     setJSONParams(json_params, json_params_names, this);
 
     let geometry = new THREE.SphereBufferGeometry( 5, 32, 32 );
-    let material = new THREE.MeshBasicMaterial( {color: 0xffff00} )
+    let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
 
     this.mesh = new THREE.Mesh(geometry, material);
     this.mesh.add(new THREE.AxesHelper(5));

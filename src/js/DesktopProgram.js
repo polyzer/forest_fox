@@ -7,9 +7,49 @@
 class DesktopMasterProgram {
     constructor(){
         this.makeBindings();
+        this.addEventListeners();
+        ///////////////////////////
+        this.FoxCameraView = {
+            Current: null,
+            POSITIONS: {
+                FIRST_FACE: new THREE.Vector3(-1, 1.2, -0.35),
+                THIRD_FACE: new THREE.Vector3(-3, 5, 8)
+            }
+        };
+        this.FoxCameraView.Current = this.FoxCameraView.FIRST_FACE;
+        ///////////////////////////
+        this.LoadingManager = new THREE.LoadingManager();
+        this.LoadingManager.onStart = function () {
 
-        window.addEventListener("resize", this.onWindowResize);
+            let material = new THREE.ShaderMaterial( {
+                uniforms: {
+                    time: { value: 1.0 },
+                    resolution: { value: new THREE.Vector2() }
+                },
+                vertexShader: document.getElementById( 'vertexShader' ).textContent,
+                fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+            } );
+            
+            let scene = new THREE.Scene();
+            let container = document.createElement("div");
+            container.style.height = window.innerHeight + "px";
+            container.style.width = window.innerWidth + "px";
+            let Renderer = new THREE.WebGLRenderer();
 
+            Renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(Renderer.domElement);
+            
+
+        };
+        this.LoadingManager.onLoad = function () {
+            
+        };
+        this.LoadingManager.onProgress = function () {
+
+        };
+        this.LoadingManager.onError = function () {
+
+        };
         this.GroundParameters = new THREE.Vector3(1000, 0, 1000);
 
         this.FrontMovingOn = false;
@@ -18,6 +58,8 @@ class DesktopMasterProgram {
         this.RightMovingOn = false;
 
         this.updatableFunctions = [];
+
+
 
         this.Scene = new THREE.Scene();
         this.Scene.background = new THREE.Color( 0xaaccff );
@@ -109,7 +151,9 @@ class DesktopMasterProgram {
                 case CONSTANTS.MESSAGES_TYPES.RIGHT_BUTTON_UP:
                     this.RightMovingOn = false;
                 break;
-                //MOVEMENT_MESSAGES END
+                case CONSTANTS.MESSAGES_TYPES.CHANGEVIEW_BUTTON_DOWN:
+                    this.onChangeView();    
+                break;                //MOVEMENT_MESSAGES END
 
                 default:
                     console.log(data.Type);
@@ -126,6 +170,25 @@ class DesktopMasterProgram {
         }.bind(this);
         this.createScene();
         this.update();
+    }
+
+    addEventListeners() {
+        window.addEventListener("resize", this.onWindowResize);
+    }
+
+    onChangeView() {
+        switch(this.FoxCameraView.Current){
+            case this.FoxCameraView.POSITIONS.FIRST_FACE:
+                this.FoxCameraView.Current = this.FoxCameraView.POSITIONS.THIRD_FACE;
+                this.Cameras.FoxFirstPersonCamera.position.copy( this.FoxCameraView.POSITIONS.THIRD_FACE);
+            break;
+            case this.FoxCameraView.POSITIONS.THIRD_FACE:
+                this.FoxCameraView.Current = this.FoxCameraView.POSITIONS.FIRST_FACE;
+                this.Cameras.FoxFirstPersonCamera.position.copy( this.FoxCameraView.POSITIONS.FIRST_FACE);
+            break;
+            default:
+                throw new Error("WTF?");
+        }
     }
 
     makeBindings(){
@@ -274,12 +337,15 @@ class DesktopMasterProgram {
         }.bind(this));
         this.Loader.load("./src/models/fox_walk.dae", function (dae){
             this.ControlObject = new THREE.Object3D();
-            this.Cameras.FoxFirstPersonCamera.position.set(-1, 1.2, -0.35);
+            this.FoxCameraView.Current = this.FoxCameraView.POSITIONS.FIRST_FACE;
+            this.Cameras.FoxFirstPersonCamera.position.copy(this.FoxCameraView.POSITIONS.FIRST_FACE);
+            //this.Cameras.FoxFirstPersonCamera.lookAt(new THREE.Vector3(0,0,0));
             this.Scene.add(this.ControlObject);
             this.ControlObject.add(this.Cameras.FoxFirstPersonCamera);
             this.ControlObject.add(dae.scene);
             dae.scene.rotation.z+= Math.PI;
             dae.scene.scale.set(0.5, 0.5, 0.5);
+            dae.scene.position.y += 0.3;
             var animations = dae.animations;
 			var avatar = dae.scene;
 			dae.scene.children[1].material.color = new THREE.Color(0xFFFFFF);
@@ -311,12 +377,16 @@ class DesktopMasterProgram {
     }
 
     async foxAppearance() {
-        
+        // генерим точку, в которой будет лиса 
         let point = new THREE.Vector3(
-            Math.random()*this.GroundParameters.x,
-            Math.random()*this.GroundParameters.y,
-            Math.random()*this.GroundParameters.z 
+            Math.random()*this.GroundParameters.x/6 - this.GroundParameters.x/6,
+            0,
+            Math.random()*this.GroundParameters.z/6 - this.GroundParameters.z/6 
         );
+        // скопировали лисе положение
+        this.ControlObject.position.copy(point);
+        // камера придёт в точку с y = 1; (иначе по-уродски получается)
+        point.y = 1;
 
         this.Cameras.MovingCamera.position.copy(this.Cameras.WaitingConnectionCamera.position);
         this.Camera = this.Cameras.MovingCamera;
@@ -324,14 +394,15 @@ class DesktopMasterProgram {
             this.updatableFunctions.push(function (time){
                 let pos = this.Cameras.MovingCamera.position.clone();
                 let len = pos.sub(point).length();
-                if(len > 3){
+                let vec_mul_len = time*10;
+                if(len > vec_mul_len){
                     let sub_vec = point.clone();
                     sub_vec.sub(this.Cameras.MovingCamera.position);
-                    this.Cameras.MovingCamera.position.add(sub_vec.normalize().multiplyScalar(time*10));
+                    this.Cameras.MovingCamera.position.add(sub_vec.normalize().multiplyScalar(vec_mul_len));
                     this.Camera.lookAt(point);
                 } else{
                     this.updatableFunctions.splice(0,this.updatableFunctions.length);
-                    console.log("ok");
+                    //alert("ok");
                     resolve();
                 }
             }.bind(this));    

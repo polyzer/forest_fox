@@ -1,5 +1,4 @@
 /*
-SkyFox Team Controller.
 On Desktop computer version we use THREE.FlyControls.
 On Mobile phones we using Our Controls System.
 
@@ -15,7 +14,6 @@ class MobileControls
 			PORTRAIT: 0,
 			LANDSCAPE: 1
 		};
-
 
 		if(json_params)
 		{
@@ -97,7 +95,7 @@ class MobileControls
 			this.DeviceType = this.DEVICE_TYPES.DESKTOP;
 		}
 
-
+		
 		this.Buttons.AccelerometerControl = document.createElement("button");
 		this.Buttons.AccelerometerControl.setAttribute("id", "AccelerometerControlButton");
 		this.Buttons.AccelerometerControl.className = "AccelerometerControlButton";
@@ -127,6 +125,7 @@ class MobileControls
 		this.Buttons.FrontMoving.className = "FrontMovingButton-portrait-block";
 		this.Buttons.FrontMoving.classList.add("hoverclass");
 		// document.body.appendChild(this.Buttons.FrontMoving);
+
 
 		this.Buttons.FrontMoving.onmousedown = function (event)
 		{
@@ -179,7 +178,40 @@ class MobileControls
 	//	 	this.BackMovingOn = false;
 			this.sendBackButtonUp();
 
+		}.bind(this);
+
+		this.Buttons.ChangeView = document.createElement("div");
+		this.Buttons.ChangeView.setAttribute("id", "FrontMovingButton");
+		this.Buttons.ChangeView.className = "ChangeView-portrait-block";
+		this.Buttons.ChangeView.classList.add("hoverclass");	
+
+		this.Buttons.ChangeView.onmousedown = function (event)																								
+		{
+	//	 	this.BackMovingOn = true;
+			this.sendChangeViewButtonDown();
+		}.bind(this);
+
+		this.Buttons.ChangeView.ontouchstart = function (event)
+		{
+	//	 	this.BackMovingOn = true;
+			this.sendChangeViewButtonDown();
+
 			}.bind(this);
+
+	// 	this.Buttons.ChangeView.onmouseup = function (event)
+	// 	{
+	// //	 	this.BackMovingOn = false;
+	// 		this.sendChangeViewButtonUp();
+
+	// 		}.bind(this);
+
+	// 	this.Buttons.ChangeView.ontouchend = function (event)
+	// 	{
+	// //	 	this.BackMovingOn = false;
+	// 		this.sendChangeViewButtonUp();
+
+	// 	}.bind(this);
+
 
 		this.RotationArea = document.createElement("div");
 		this.RotationArea.id = "RotationArea";
@@ -217,6 +249,7 @@ class MobileControls
 	    document.body.appendChild(this.Buttons.TouchControl);
 		document.body.appendChild(this.Buttons.FrontMoving);
 		document.body.appendChild(this.RotationArea);
+		document.body.appendChild(this.Buttons.ChangeView);
 		this.RotateHammer.enable = true;
 		this.update = this.touchUpdate;
 //	}
@@ -233,6 +266,13 @@ class MobileControls
 	}
 	sendBackButtonUp(){
 		this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.BACK_BUTTON_UP}));
+	}
+
+	sendChangeViewButtonDown(){
+		this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.CHANGEVIEW_BUTTON_DOWN}));
+	}
+	sendChangeViewButtonUp(){
+		this.Socket.send(JSON.stringify({Type: CONSTANTS.MESSAGES_TYPES.CHANGEVIEW_BUTTON_UP}));
 	}
 
 
@@ -315,7 +355,7 @@ onDeviceMotion(event) {
 	this.OrientationParameters.theta = 0;
 };
 
-// Наш обработчик ускорения
+// Наш обработчик поворота
 	onDeviceOrientation(event) {
 
 		this.OrientationParameters.alpha = event.alpha;
@@ -330,7 +370,6 @@ onDeviceMotion(event) {
 		let aspect = window.innerWidth / window.innerHeight;
 		this.Camera.aspect = window.innerWidth / window.innerHeight;
 		this.Camera.updateProjectionMatrix();
-//		this.Renderer.setSize( window.innerWidth, window.innerHeight );
 		if(aspect <= 1)
 		{
 			this.setPortraitDisposition();
@@ -343,26 +382,32 @@ onDeviceMotion(event) {
 		this.Buttons.FrontMoving.classList.remove("FrontMovingButton-landscape-block");
 		this.Buttons.BackMoving.classList.remove("BackMovingButton-landscape-block");
 		this.RotationArea.classList.remove("rotation-area-landscape-block");
+		this.Buttons.ChangeView.classList.remove("BackMovingButton-landscape-block");
 		this.Buttons.FrontMoving.classList.add("FrontMovingButton-portrait-block");
 		this.Buttons.BackMoving.classList.add("BackMovingButton-portrait-block");
 		this.RotationArea.classList.add("rotation-area-portrait-block");
+		this.Buttons.ChangeView.classList.add("ChangeViewButton-portrait-block");
 
 		this.RotationArea.style.width = window.innerWidth + "px";
 		this.RotationArea.style.height = window.innerHeight*0.7 + "px";
 		
-		this.Buttons.FrontMoving.style.height = window.innerWidth*0.3 + "px";
-		this.Buttons.FrontMoving.style.width = window.innerWidth*0.3 + "px";
-		this.Buttons.BackMoving.style.height = window.innerWidth*0.3 + "px";
-		this.Buttons.BackMoving.style.width = window.innerWidth*0.3 + "px";
+		this.Buttons.FrontMoving.style.height = window.innerHeight*0.3 + "px";
+		this.Buttons.FrontMoving.style.width = window.innerHeight*0.3 + "px";
+		this.Buttons.BackMoving.style.height = window.innerHeight*0.3 + "px";
+		this.Buttons.BackMoving.style.width = window.innerHeight*0.3 + "px";
+		this.Buttons.ChangeView.style.height = window.innerHeight*0.3 + "px";
+		this.Buttons.ChangeView.style.width = window.innerHeight*0.3 + "px";
 		
 	}
 	setLandscapeDisposition () {
 		this.Buttons.FrontMoving.classList.remove("FrontMovingButton-portrait-block");
 		this.Buttons.BackMoving.classList.remove("BackMovingButton-portrait-block");
 		this.RotationArea.classList.remove("rotation-area-portrait-block");
+		this.Buttons.ChangeView.classList.add("ChangeViewButton-portrait-block");
 		this.Buttons.FrontMoving.classList.add("FrontMovingButton-landscape-block");
 		this.Buttons.BackMoving.classList.add("BackMovingButton-landscape-block");
 		this.RotationArea.classList.add("rotation-area-landscape-block");
+		this.Buttons.ChangeView.classList.add("ChangeViewButton-landscape-block");
 
 		this.RotationArea.style.height = window.innerHeight + "px";
 		this.RotationArea.style.width = window.innerWidth*0.6 + "px";
@@ -371,5 +416,7 @@ onDeviceMotion(event) {
 		this.Buttons.FrontMoving.style.width = window.innerHeight*0.3 + "px";
 		this.Buttons.BackMoving.style.height = window.innerHeight*0.3 + "px";
 		this.Buttons.BackMoving.style.width = window.innerHeight*0.3 + "px";
+		this.Buttons.ChangeView.style.height = window.innerWidth*0.3 + "px";
+		this.Buttons.ChangeView.style.width = window.innerWidth*0.3 + "px";
 	}
 };
